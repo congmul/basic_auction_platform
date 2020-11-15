@@ -40,15 +40,63 @@ function appStart(){
     ]).then((res) => {
         if(res.userChoice === "POST"){
             console.log("POST");
-            appStart();
+            postInquierer();
+            
 
         }else if(res.userChoice === "BID"){
             console.log("BID");
-            appStart();
+            bidInquierer();
 
         }else{
             console.log("EXIT, BYE");
             connection.end();
         }
+    });
+}
+
+function postInquierer(){
+    inquirer
+        .prompt([
+        {
+            type:"input",
+            message:"What is the item you would like to submit? ",
+            name:"product"
+        },
+        {
+            type:"input",
+            message:"What category would you like to place your auction in? ",
+            name:"category"
+        },
+        {
+            type:"input",
+            message:"What would you like your starting bid to be? ",
+            name:"startingBid"
+        }
+    ]).then((res) => {
+        console.log(res);
+        console.log("Your auction was created successfully!");
+
+        appStart();
+    });
+}
+
+function bidInquierer(){
+    inquirer
+        .prompt([
+        {
+            type:"input",
+            message:"What auction would you like to place a bid in? ",
+            name:"category"
+        },
+        {
+            type:"input",
+            message:"How much would you like to bid? ",
+            name:"userBid"
+        }
+    ]).then((res) => {
+        console.log(res);
+        console.log("Bid placed successfully!");
+
+        appStart();
     });
 }
