@@ -44,8 +44,10 @@ function appStart(){
             
 
         }else if(res.userChoice === "BID"){
+
             console.log("BID");
-            bidInquierer();
+            viewProductForBid();
+            // bidInquierer();
 
         }else{
             console.log("EXIT, BYE");
@@ -81,13 +83,21 @@ function postInquierer(){
     });
 }
 
-function bidInquierer(){
+function bidInquierer(productObject, productsName){
+    console.log("productObject");
+    console.log(productObject);
+    if(productsName.length < 1){
+        console.log("There is no item in Auction");
+        appStart();
+        return;
+    }
     inquirer
         .prompt([
         {
-            type:"input",
+            type:"list",
             message:"What auction would you like to place a bid in? ",
-            name:"category"
+            name:"name",
+            choices:productsName
         },
         {
             type:"input",
@@ -122,3 +132,37 @@ function creatProduct(name, category, startingBid) {
         }
     )
 }
+
+function viewProductForBid() {
+    let productsName = [];
+    connection.query(
+        "SELECT * FROM productLists",
+        function (err, res) {
+            if(err) throw err;
+            // console.log(res);
+            res.forEach(element =>{
+                // console.log(element.name);
+                productsName.push(element.name);
+            });
+            
+            bidInquierer(res, productsName);
+        });   
+}
+
+// function updateProduct(name, category, bidding) {
+//     let query = connection.query(
+//         "INSERT INTO productLists SET ?",
+//         {
+//             name: name,
+//             category: category,
+//             startingBid: startingBid,
+//             maxBid: null
+//         },
+//         function (err, res) {
+//             if(err) throw err;
+//             console.log(res.affectedRows + " product inserted!\n");
+
+//             appStart();
+//         }
+//     )
+// }
