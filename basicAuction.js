@@ -60,7 +60,7 @@ function postInquierer(){
         {
             type:"input",
             message:"What is the item you would like to submit? ",
-            name:"product"
+            name:"name"
         },
         {
             type:"input",
@@ -74,9 +74,10 @@ function postInquierer(){
         }
     ]).then((res) => {
         console.log(res);
-        console.log("Your auction was created successfully!");
+        creatProduct(res.name, res.category, res.startingBid);
 
-        appStart();
+        console.log("Your auction was created successfully!");
+        
     });
 }
 
@@ -99,4 +100,25 @@ function bidInquierer(){
 
         appStart();
     });
+}
+
+
+////////////////////////////////////////////////////////////////
+// SQL
+function creatProduct(name, category, startingBid) {
+    let query = connection.query(
+        "INSERT INTO productLists SET ?",
+        {
+            name: name,
+            category: category,
+            startingBid: startingBid,
+            maxBid: null
+        },
+        function (err, res) {
+            if(err) throw err;
+            console.log(res.affectedRows + " product inserted!\n");
+
+            appStart();
+        }
+    )
 }

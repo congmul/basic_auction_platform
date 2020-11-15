@@ -9,5 +9,6 @@ CREATE TABLE productLists (
   name VARCHAR(45) NULL,
   category VARCHAR(45) NULL,
   startingBid INT NULL,
+  maxBid INT,
   PRIMARY KEY (id)
 );
