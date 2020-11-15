@@ -114,7 +114,14 @@ function bidInquierer(productObject, productsName) {
                     {
                         type: "input",
                         message: "How much would you like to bid? ",
-                        name: "userBid"
+                        name: "userBid",
+                        validate: (userBid) =>{
+                            if(!/[0-9]/gi.test(userBid) || /[a-z]/gi.test(userBid)){
+                                return "Please enter number";
+                            }else{
+                                return true;
+                            }
+                        }
                     }
                 ]).then((res) => {
                     if(res.userBid < currentBid || res.userBid < maxBid){
@@ -213,8 +220,4 @@ function viewProductForBid() {
 //             appStart();
 //         }
 //     )
-// }
-
-// function validate(userBid, productName) {
-//     if(userBid < productObject[])
 // }
