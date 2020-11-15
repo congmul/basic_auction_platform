@@ -19,6 +19,7 @@
   "homepage": "https://github.com/congmul/basic_auction_platform#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
   }
 }
