@@ -39,17 +39,17 @@ function appStart() {
             }
         ]).then((res) => {
             if (res.userChoice === "POST") {
-                console.log("POST");
+                // console.log("POST");
                 postInquierer();
 
 
             } else if (res.userChoice === "BID") {
 
-                console.log("BID");
+                // console.log("BID");
                 viewProductForBid();
 
             } else {
-                console.log("EXIT, BYE");
+                console.log("Thanks, BYE");
                 connection.end();
             }
         });
@@ -101,12 +101,14 @@ function bidInquierer(productObject, productsName) {
         ]).then((res) => {
             let currentBid = 0;
             let maxBid = 0;
+            let id = 0;
             // console.log(res.name);
             // console.log(productObject);
             for (let i = 0; i < productObject.length; i++) {
                 if (res.name === productObject[i].name) {
                     currentBid = productObject[i].startingBid;
                     maxBid = productObject[i].maxBid;
+                    id = productObject[i].id;
                 }
             }
             inquirer
@@ -128,8 +130,12 @@ function bidInquierer(productObject, productsName) {
                         console.log("Your bid was too low. Try again...");
                         appStart();
                     }else{
-                        console.log("Bid placed successfully!");
-                         appStart();
+                        // console.log(res.userBid);
+                        // console.log("id");
+                        // console.log(id);
+                        let userBid = res.userBid
+                        updateProduct(userBid, id);
+                        
                     }
                 });
         });
@@ -204,20 +210,21 @@ function viewProductForBid() {
         });
 }
 
-// function updateProduct(name, category, bidding) {
-//     let query = connection.query(
-//         "INSERT INTO productLists SET ?",
-//         {
-//             name: name,
-//             category: category,
-//             startingBid: startingBid,
-//             maxBid: null
-//         },
-//         function (err, res) {
-//             if(err) throw err;
-//             console.log(res.affectedRows + " product inserted!\n");
-
-//             appStart();
-//         }
-//     )
-// }
+function updateProduct(userBid, id) {
+    connection.query(
+        "UPDATE productLists SET ? WHERE ?",
+        [
+        {
+            maxBid: userBid
+        },
+        {
+            id: id
+        }
+    ],
+        function (err) {
+            if(err) throw err;
+            console.log("Bid placed successfully!");
+            appStart();
+        }
+    )
+}
